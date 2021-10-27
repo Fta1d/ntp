@@ -6,20 +6,28 @@
 #include <netdb.h>
 #include <time.h>
 #include <string.h>
+#include <stdlib.h>
+#include <unistd.h>
 
 
-void ntpdate();
+void ntpdate(char *arg);
 
-int main() {
-    ntpdate();
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        fprintf(stderr, "Less arguments than expected\n");
+        return 0;
+    }
+
+    ntpdate(argv[1]);
     return 0;
 }
 
-void ntpdate() {
+void ntpdate(char *arg) {
     char *host = "213.231.2.124";
     int port = 123;
     int len = 1024;
     int i;
+
     unsigned char pack[48] = {010,0,0,0,0,0,0,0,0};
     unsigned long  buf[len];
     struct protoent *proto;
@@ -48,6 +56,8 @@ void ntpdate() {
     tmit -= 2208988800U;
 
     printf("Time: %s",ctime(&tmit));
+
+    sleep(atoi(arg));
 
     i=time(0);
 
